@@ -4,10 +4,10 @@ import { useStore } from '../services/store';
 import { Theme } from '../components/Theme';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { Ticket, Users, CheckCircle, Clock, QrCode } from 'lucide-react-native';
+import { Ticket, Users, CheckCircle, Clock, QrCode, LogOut } from 'lucide-react-native';
 
 export const DashboardScreen = () => {
-  const { getMetrics, zones, tickets, recentScans } = useStore();
+  const { getMetrics, zones, tickets, recentScans, logout } = useStore();
   const metrics = getMetrics();
   const navigation = useNavigation<BottomTabNavigationProp<any>>();
 
@@ -19,10 +19,15 @@ export const DashboardScreen = () => {
           <Ticket color={Theme.colors.primary} size={24} />
           <Text style={styles.headerTitle}>NOVATICK <Text style={styles.headerVip}>VIP</Text></Text>
         </View>
-        <TouchableOpacity style={styles.headerScanBtn} onPress={() => navigation.navigate('Scanner')}>
-          <QrCode color={Theme.colors.background} size={16} />
-          <Text style={styles.headerScanText}>ESCÁNER</Text>
-        </TouchableOpacity>
+        <View style={styles.headerRight}>
+          <TouchableOpacity style={styles.headerScanBtn} onPress={() => navigation.navigate('Scanner')}>
+            <QrCode color={Theme.colors.background} size={16} />
+            <Text style={styles.headerScanText}>ESCÁNER</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={logout}>
+            <LogOut color={Theme.colors.danger} size={24} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.liveIndicatorContainer}>
@@ -133,6 +138,11 @@ const styles = StyleSheet.create({
   },
   headerVip: {
     color: Theme.colors.primary,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Theme.spacing.m,
   },
   headerScanBtn: {
     flexDirection: 'row',

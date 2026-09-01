@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+export type UserRole = 'attendee' | 'admin' | null;
+
 export type TicketStatus = 'pending' | 'scanned';
 
 export interface Ticket {
@@ -27,6 +29,9 @@ export interface AppState {
   zones: Zone[];
   tickets: Ticket[];
   recentScans: ScanLog[];
+  userRole: UserRole;
+  login: (role: UserRole) => void;
+  logout: () => void;
   scanTicket: (hash: string) => { success: boolean; message: string };
   toggleTicketStatus: (ticketId: string) => void;
   getMetrics: () => { totalScanned: number; totalPending: number; totalCapacity: number };
@@ -57,6 +62,10 @@ export const useStore = create<AppState>((set, get) => ({
   zones: MOCK_ZONES,
   tickets: MOCK_TICKETS,
   recentScans: [],
+  userRole: null,
+
+  login: (role) => set({ userRole: role }),
+  logout: () => set({ userRole: null }),
 
   scanTicket: (hash) => {
     const { tickets } = get();
